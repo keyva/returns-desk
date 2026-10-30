@@ -1,0 +1,29 @@
+# Terraform / OpenTofu
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+
+# local
+.env
+.DS_Store
+
+# app logs
+app/logs/
+
+# demo data
+app/data/evaluation.json
+
+# working notes that name real cloud accounts, and raw image-generation output
+docs/DEPLOY-LOG.md
+app/data/photos/originals/

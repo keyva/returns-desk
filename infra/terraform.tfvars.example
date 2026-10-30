@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars (git-ignored) and fill in.
+subscription_id      = "00000000-0000-0000-0000-000000000000"
+location             = "eastus"
+budget_contact_email = "you@example.com"
+
+# Older/pricier alternatives (gpt-4.1-mini is marked Legacy, gpt-4o-mini Deprecating):
+# model_name    = "gpt-4.1-mini"
+# model_version = "2025-04-14"

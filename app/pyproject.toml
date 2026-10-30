@@ -1,0 +1,29 @@
+[project]
+name = "returns-desk"
+version = "0.1.0"
+description = "A returns desk where policy rules, engines read, and a clerk decides. Microsoft Foundry demo."
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "openai>=3.39,<4",
+    "azure-identity>=1.27,<2",
+    "pydantic>=2.9,<3",
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+]
+
+[project.scripts]
+returns-desk = "returns_desk.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "httpx>=0.27"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/returns_desk"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

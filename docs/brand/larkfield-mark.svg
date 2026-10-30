@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Larkfield">
+<title>Larkfield</title>
+<g>
+  <defs><clipPath id="tile"><rect width="64" height="64" rx="14"/></clipPath></defs>
+  <rect width="64" height="64" rx="14" fill="#2F5D4F"/>
+  <g clip-path="url(#tile)">
+    <path d="M18 39 A14 14 0 0 1 46 39 Z" fill="#E0A947"/>
+    <path d="M-2 44 Q32 36 66 44" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M4 52 Q32 45 60 52" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".8"/>
+    <path d="M12 60 Q32 54 52 60" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".6"/>
+    <path d="M37 19 q3.2 -3.4 6.4 0 q3.2 -3.4 6.4 0" fill="none" stroke="#F4EEDF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</g>
+</svg>

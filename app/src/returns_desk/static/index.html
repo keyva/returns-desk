@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Returns Desk · Larkfield</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Larkfield"%3E%3Ctitle%3ELarkfield%3C/title%3E%3Cg%3E  %3Cdefs%3E%3CclipPath id="tile"%3E%3Crect width="64" height="64" rx="14"/%3E%3C/clipPath%3E%3C/defs%3E  %3Crect width="64" height="64" rx="14" fill="#2F5D4F"/%3E  %3Cg clip-path="url%28#tile%29"%3E    %3Cpath d="M18 39 A14 14 0 0 1 46 39 Z" fill="#E0A947"/%3E    %3Cpath d="M-2 44 Q32 36 66 44" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round"/%3E    %3Cpath d="M4 52 Q32 45 60 52" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".8"/%3E    %3Cpath d="M12 60 Q32 54 52 60" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".6"/%3E    %3Cpath d="M37 19 q3.2 -3.4 6.4 0 q3.2 -3.4 6.4 0" fill="none" stroke="#F4EEDF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/%3E  %3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the clerk's board. Header strip with badges and tabs; three columns (queue / open request /
+   policy); resolution log and cost tiles underneath. The two engines sit side by side with the
+   agreement chip between them. */
+:root {
+  --bg: #171a1e; --panel: #1f2328; --panel-2: #262b31; --line: #343a42;
+  --fg: #ebe9e4; --muted: #9ba2aa;
+  --paper: #f6f4ef; --paper-fg: #1d2023; --paper-muted: #6a6f75;
+  --accent: #e2482f; --accent-fg: #ffffff;
+  --ok: #63b47c; --warn: #e3a63b; --bad: #e25a4a; --bar: #3a4e9c;
+  --brand-word: #f4eedf; --brand-tag: #e0a947;
+  --display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eeeeea; --panel: #ffffff; --panel-2: #f4f4f1; --line: #d9d9d4;
+    --fg: #1d2023; --muted: #656b72; --paper: #ffffff;
+    --accent: #cf3a22; --ok: #2f8a4c; --warn: #b77a15; --bad: #c43f30; --bar: #3a4e9c;
+    --brand-word: #1e2b27; --brand-tag: #2f5d4f;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eeeeea; --panel: #ffffff; --panel-2: #f4f4f1; --line: #d9d9d4;
+  --fg: #1d2023; --muted: #656b72; --paper: #ffffff;
+  --accent: #cf3a22; --ok: #2f8a4c; --warn: #b77a15; --bad: #c43f30; --bar: #3a4e9c;
+  --brand-word: #1e2b27; --brand-tag: #2f5d4f;
+    color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px;
+  line-height: 1.4; padding-block: 0 24px; overflow-x: clip;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-family: var(--display); font-size: 13px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.mono { font-family: var(--mono); }
+.empty { color: var(--muted); font-style: italic; padding: 10px 0; }
+.hint { color: var(--muted); font-size: 14px; margin-top: 8px; }
+.err { color: var(--bad); font-size: 14px; margin-top: 10px; }
+
+/* header */
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-block: 18px 0; }
+header h1 { font-size: 34px; line-height: 1; }
+header h1 span { color: var(--accent); }
+.brandbar { display: flex; align-items: center; gap: 18px; }
+.lockup { height: 44px; width: auto; display: block; }
+.lk-word { fill: var(--brand-word); } .lk-tag { fill: var(--brand-tag); }
+.brandbar .rule { width: 1px; align-self: stretch; background: var(--line); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; max-width: 100%; align-items: center; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; color: var(--muted); background: var(--panel); }
+.badge b { color: var(--fg); font-weight: 500; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.dot.off { background: var(--warn); }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-top: 14px; }
+.tab { background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); padding: 8px 14px; font-family: var(--display); font-size: 18px; letter-spacing: .04em; text-transform: uppercase; }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.demo-only { font-size: 12px; color: var(--warn); text-transform: uppercase; letter-spacing: .08em; }
+
+/* main grid */
+main { display: grid; grid-template-columns: 260px minmax(0, 1fr) 300px; gap: 20px; padding-top: 20px; align-items: start; }
+main > section, .bench .card, .foot > section { min-width: 0; }
+@media (max-width: 1100px) { main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .bench { grid-column: 1 / -1; order: -1; } }
+@media (max-width: 700px) { main { grid-template-columns: minmax(0, 1fr); } }
+section > .eyebrow { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+section > .eyebrow .count { color: var(--fg); }
+
+/* queue rail */
+.rail { display: grid; gap: 10px; }
+.slip { background: var(--paper); color: var(--paper-fg); font-family: var(--mono); font-size: 13px; padding: 10px 14px; border-radius: 3px; box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.slip .head { display: flex; justify-content: space-between; gap: 8px; font-weight: 500; }
+.slip .sub { color: var(--paper-muted); margin-top: 4px; overflow-wrap: anywhere; }
+.slip.next { outline: 2px solid var(--accent); }
+button.slip { display: block; width: 100%; text-align: left; border: 0; cursor: pointer; }
+button.slip .sub { display: block; }
+button.slip:hover, button.slip:focus-visible { outline: 2px solid var(--accent); }
+button.slip:disabled { cursor: default; opacity: .6; }
+
+/* open request */
+.bench .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; }
+.bench h2 { font-size: 26px; }
+.bench .sub { color: var(--muted); margin-top: 2px; }
+.facts { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; margin: 14px 0 4px; align-items: start; }
+@media (max-width: 700px) { .facts { grid-template-columns: minmax(0, 1fr); } }
+.facts dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; font-size: 14px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+.statement { font-style: italic; }
+.photo { max-width: 180px; width: 100%; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); }
+.chip { display: inline-block; padding: 2px 8px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); font-size: 13px; }
+.chip.flag { border-color: var(--warn); color: var(--warn); }
+
+.engines { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 12px; margin-top: 14px; align-items: stretch; }
+@media (max-width: 800px) { .engines { grid-template-columns: minmax(0, 1fr); } }
+.engine { background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; min-width: 0; }
+.engine .eyebrow { font-size: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 8px; }
+.engine .pick { font-family: var(--display); font-size: 24px; line-height: 1.1; text-transform: capitalize; }
+.engine .pick.none { color: var(--muted); text-transform: none; }
+.engine .why { margin-top: 6px; color: var(--muted); font-size: 14px; }
+.engine .flags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.engine details { margin-top: 10px; font-size: 14px; }
+.engine summary { cursor: pointer; color: var(--muted); }
+.engine details p { margin: 6px 0 0; }
+.agreechip { align-self: center; text-align: center; font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); font-family: var(--display); letter-spacing: .08em; text-transform: uppercase; }
+.agreechip.yes { color: var(--ok); border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.agreechip.no { color: var(--warn); border-color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.agreechip.none { color: var(--muted); }
+.bars { display: grid; gap: 5px; margin-top: 8px; }
+.bar { display: grid; grid-template-columns: minmax(0, 1fr) 46px; gap: 8px; align-items: center; font-size: 13px; }
+.bar .label { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.bar .label span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 64px; }
+.bar .track { flex: 1; height: 8px; background: color-mix(in srgb, var(--line) 60%, transparent); border-radius: 4px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--bar); border-radius: 4px; }
+.bar.top .fill { background: var(--accent); }
+.bar .pct { text-align: right; color: var(--muted); }
+
+.clerk { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.clerk .row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.clerk label { color: var(--muted); font-size: 14px; }
+select, input[type=number], textarea { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); max-width: 100%; }
+textarea { width: 100%; min-height: 56px; resize: vertical; }
+.dispositions { display: flex; flex-wrap: wrap; gap: 8px; }
+.dispositions label { display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; color: var(--fg); background: var(--panel-2); }
+.dispositions input:checked + span { color: var(--accent); font-weight: 600; }
+
+.btn { padding: 10px 16px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); font-weight: 500; font-family: var(--display); font-size: 17px; letter-spacing: .02em; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.btn.small { padding: 4px 10px; font-size: 14px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.big { font-size: 20px; padding: 14px 22px; }
+.idle { display: grid; place-items: center; text-align: center; padding: 40px 20px; gap: 14px; }
+.idle p { color: var(--muted); max-width: 42ch; margin: 0; }
+.result { margin-top: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); display: grid; gap: 4px; font-size: 14px; }
+.result .big { font-family: var(--display); font-size: 22px; }
+
+/* policy panel */
+.policy pre { margin: 0; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font-family: var(--mono); font-size: 12px; line-height: 1.45; overflow: auto; max-height: 70vh; white-space: pre; }
+.policy .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+/* resolution log + cost */
+.foot { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; margin-top: 24px; align-items: start; }
+@media (max-width: 900px) { .foot { grid-template-columns: minmax(0, 1fr); } }
+.log { display: grid; gap: 6px; }
+.entry { display: grid; grid-template-columns: 92px 74px 80px 1fr; gap: 12px; align-items: baseline; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font-size: 14px; }
+.entry .id { font-family: var(--mono); font-size: 13px; }
+.entry .st { font-family: var(--display); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+.entry .st.refund, .entry .st.replace { color: var(--ok); }
+.entry .st.partial { color: var(--warn); }
+.entry .st.deny { color: var(--bad); }
+.entry .st.escalate { color: var(--warn); }
+.entry .detail { color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+.resolver { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 1px 7px; border-radius: 3px; border: 1px solid var(--line); text-transform: uppercase; letter-spacing: .06em; justify-self: start; }
+.resolver.policy { color: var(--muted); }
+.resolver.engines { color: var(--bar); border-color: var(--bar); }
+.resolver.clerk { color: var(--accent); border-color: var(--accent); }
+@media (max-width: 600px) { .entry { grid-template-columns: 1fr; gap: 2px; } }
+.tiles { display: grid; gap: 10px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; }
+.tile .eyebrow { font-size: 12px; margin-bottom: 6px; }
+.tile .big { font-family: var(--display); font-size: 28px; line-height: 1; }
+.tile .small { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.tile.total { border-color: var(--accent); }
+.tile.total .big { color: var(--accent); }
+
+/* evaluation tab */
+.eval { padding-top: 20px; display: grid; gap: 24px; }
+.eval .meta { color: var(--muted); font-size: 14px; }
+.eval .meta b { color: var(--fg); font-weight: 500; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: right; padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-family: var(--display); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; color: var(--muted); }
+.grids { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.grid-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+.grid-card h3 { font-size: 20px; margin-bottom: 4px; }
+td.diag { color: var(--ok); font-weight: 600; }
+td.zero { color: var(--muted); }
+td.off { color: var(--bad); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .slip, .engine, .entry, .result { animation: in .25s ease-out; }
+  @keyframes in { from { opacity: .4; transform: translateY(4px); } }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brandbar"><svg class="lockup" viewBox="0 0 271 64" role="img" aria-label="Larkfield Home &amp; Apparel"><g>
+  <defs><clipPath id="tile"><rect width="64" height="64" rx="14"/></clipPath></defs>
+  <rect width="64" height="64" rx="14" fill="#2F5D4F"/>
+  <g clip-path="url(#tile)">
+    <path d="M18 39 A14 14 0 0 1 46 39 Z" fill="#E0A947"/>
+    <path d="M-2 44 Q32 36 66 44" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M4 52 Q32 45 60 52" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".8"/>
+    <path d="M12 60 Q32 54 52 60" fill="none" stroke="#F4EEDF" stroke-width="3.2" stroke-linecap="round" opacity=".6"/>
+    <path d="M37 19 q3.2 -3.4 6.4 0 q3.2 -3.4 6.4 0" fill="none" stroke="#F4EEDF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</g><path d="M81.012 40.0V39.54L81.978 39.172Q82.944 38.804 83.197 38.275000000000006Q83.45 37.746 83.45 36.826V12.814Q83.45 11.894000000000002 83.174 11.342Q82.898 10.79 81.978 10.468L81.012 10.100000000000001V9.64H92.742V10.100000000000001L91.914 10.468Q91.03999999999999 10.79 90.71799999999999 11.365Q90.396 11.940000000000001 90.396 12.86V39.08H97.48Q99.182 39.08 99.987 38.251999999999995Q100.792 37.424 101.52799999999999 35.86L103.322 31.996000000000002H103.782L103.368 40.0ZM112.476 40.69Q109.808 40.69 107.99100000000001 39.172Q106.174 37.653999999999996 106.174 34.802Q106.174 32.64 108.382 30.823Q110.59 29.006 115.328 28.086Q116.06400000000001 27.948 116.98400000000001 27.787Q117.904 27.625999999999998 118.916 27.442V23.808Q118.916 20.68 118.157 19.415Q117.398 18.150000000000002 115.78800000000001 18.150000000000002Q114.684 18.150000000000002 114.03999999999999 18.863Q113.396 19.576 113.212 21.324L113.12 21.830000000000002Q113.028 23.808 112.154 24.728Q111.28 25.648 109.992 25.648Q108.796 25.648 108.01400000000001 24.912Q107.232 24.176000000000002 107.232 22.934Q107.232 21.048000000000002 108.543 19.76Q109.854 18.472 112.01599999999999 17.828000000000003Q114.178 17.184 116.708 17.184Q120.802 17.184 123.03300000000002 19.185000000000002Q125.26400000000001 21.186 125.26400000000001 25.694000000000003V35.86Q125.26400000000001 37.93 127.196 37.93H128.208L128.622 38.298Q127.748 39.402 126.713 40.0Q125.678 40.598 123.792 40.598Q121.768 40.598 120.595 39.655Q119.422 38.712 119.054 37.148Q117.674 38.62 116.22500000000001 39.655Q114.77600000000001 40.69 112.476 40.69ZM115.28200000000001 37.884Q116.202 37.884 117.007 37.447Q117.812 37.01 118.916 36.09V28.362000000000002Q118.456 28.454 117.99600000000001 28.546Q117.536 28.637999999999998 116.938 28.73Q114.822 29.282 113.557 30.593Q112.292 31.904 112.292 34.112Q112.292 35.998 113.166 36.941Q114.04 37.884 115.28200000000001 37.884ZM129.588 40.0V39.54L130.27800000000002 39.356Q131.198 39.08 131.543 38.528Q131.888 37.976 131.888 37.102V22.704Q131.888 21.692 131.543 21.209Q131.198 20.726 130.27800000000002 20.542L129.588 20.358V19.898L137.5 17.23L137.96 17.69L138.374 21.646V22.014Q139.018 20.726 140.053 19.645Q141.088 18.564 142.353 17.874000000000002Q143.618 17.184 144.86 17.184Q146.608 17.184 147.52800000000002 18.15Q148.448 19.116 148.448 20.588Q148.448 22.152 147.551 23.003Q146.654 23.854 145.412 23.854Q143.48000000000002 23.854 142.008 21.922L141.916 21.830000000000002Q141.45600000000002 21.186 140.858 21.117Q140.26000000000002 21.048000000000002 139.75400000000002 21.692Q139.294 22.106 138.995 22.681Q138.696 23.256 138.42000000000002 23.992V36.826Q138.42000000000002 38.666 140.03 39.126L141.502 39.54V40.0ZM149.966 40.0V39.54L150.656 39.31Q152.22 38.804 152.22 37.056V12.446000000000002Q152.22 11.526 151.852 11.066Q151.484 10.606000000000002 150.56400000000002 10.330000000000002L149.966 10.192V9.732L158.38400000000001 7.753999999999998L158.936 8.168L158.798 14.608V37.056Q158.798 38.896 160.316 39.356L160.96 39.54V40.0ZM167.032 40.0 158.844 28.5 167.354 20.634Q167.952 20.082 168.067 19.461Q168.18200000000002 18.84 167.262 18.564L166.48000000000002 18.334V17.874H173.334V18.334L171.954 18.702Q170.942 19.024 170.32100000000003 19.461Q169.70000000000002 19.898 168.82600000000002 20.68L163.674 25.509999999999998L171.90800000000002 36.964Q172.644 37.976 173.288 38.528Q173.93200000000002 39.08 174.94400000000002 39.448L175.12800000000001 39.54V40.0ZM176.738 40.0V39.54L177.336 39.402Q178.21 39.172 178.716 38.596999999999994Q179.222 38.022 179.222 37.102Q179.222 35.4 179.245 33.721000000000004Q179.268 32.042 179.268 30.34V18.794H176.692V18.288L177.704 18.104Q178.624 18.012 179.038 17.46Q179.452 16.908 179.636 15.942Q180.096 14.148 180.993 12.791Q181.89 11.434000000000001 183.04 10.283999999999999Q184.788 8.628 186.743 7.961000000000002Q188.698 7.294000000000004 190.584 7.294000000000004Q192.424 7.294000000000004 193.942 8.053000000000003Q195.46 8.812000000000001 195.46 10.560000000000002Q195.46 11.802 194.724 12.515Q193.988 13.228000000000002 192.654 13.228000000000002Q191.55 13.228000000000002 190.63 12.63Q189.71 12.032 188.836 10.514L188.192 9.732Q187.686 9.088000000000001 187.18 9.111Q186.674 9.134 186.444 9.870000000000001Q186.12199999999999 11.48 185.961 13.642000000000001Q185.8 15.804000000000002 185.8 17.874H190.952V18.794H185.8V37.01Q185.8 38.758 187.64 39.264L188.79 39.54V40.0ZM197.944 14.792000000000002Q196.38 14.792000000000002 195.29899999999998 13.803Q194.218 12.814 194.218 11.296Q194.218 9.732 195.29899999999998 8.765999999999998Q196.38 7.799999999999997 197.944 7.799999999999997Q199.50799999999998 7.799999999999997 200.56599999999997 8.765999999999998Q201.624 9.732 201.624 11.296Q201.624 12.814 200.56599999999997 13.803Q199.50799999999998 14.792000000000002 197.944 14.792000000000002ZM192.516 40.0V39.54L193.16 39.356Q194.07999999999998 39.08 194.42499999999998 38.528Q194.76999999999998 37.976 194.76999999999998 37.056V22.658Q194.76999999999998 21.692 194.42499999999998 21.209Q194.07999999999998 20.726 193.16 20.542L192.516 20.404V19.944L200.934 17.23L201.394 17.69L201.256 24.222V37.102Q201.256 38.022 201.601 38.574Q201.946 39.126 202.82 39.402L203.28 39.54V40.0ZM216.85 17.184Q219.83999999999997 17.184 221.95599999999996 18.403Q224.07199999999997 19.622 225.19899999999998 21.715Q226.326 23.808 226.326 26.476Q226.326 26.982 226.27999999999997 27.511Q226.23399999999998 28.04 226.09599999999998 28.454H212.38799999999998Q212.434 33.422 214.159 35.607Q215.884 37.792 219.28799999999998 37.792Q221.588 37.792 223.014 37.056Q224.44 36.32 225.682 34.894L226.142 35.308Q224.71599999999998 37.838 222.34699999999998 39.263999999999996Q219.97799999999998 40.69 216.666 40.69Q213.39999999999998 40.69 210.86999999999998 39.287Q208.33999999999997 37.884 206.914 35.262Q205.488 32.64 205.488 29.006Q205.488 25.234 207.144 22.589Q208.79999999999998 19.944 211.399 18.564Q213.998 17.184 216.85 17.184ZM216.712 18.104Q215.378 18.104 214.435 18.909Q213.492 19.714 212.963 21.761Q212.434 23.808 212.38799999999998 27.534H220.254Q220.714 22.52 219.886 20.311999999999998Q219.058 18.104 216.712 18.104ZM228.76399999999998 40.0V39.54L229.316 39.356Q230.97199999999998 38.804 230.97199999999998 37.056V12.446000000000002Q230.97199999999998 11.526 230.60399999999998 11.043000000000001Q230.236 10.560000000000002 229.316 10.330000000000002L228.718 10.192V9.732L237.136 7.753999999999998L237.688 8.168L237.504 14.608V30.34Q237.504 32.042 237.527 33.721000000000004Q237.54999999999998 35.4 237.54999999999998 37.056Q237.54999999999998 37.976 237.918 38.551Q238.286 39.126 239.16 39.402L239.75799999999998 39.54V40.0ZM251.534 40.69Q248.82 40.69 246.658 39.471000000000004Q244.49599999999998 38.252 243.231 35.699Q241.966 33.146 241.966 29.144Q241.966 25.096 243.392 22.451Q244.81799999999998 19.806 247.164 18.495Q249.51 17.184 252.26999999999998 17.184Q253.88 17.184 255.352 17.506Q256.824 17.828 257.974 18.472V12.492Q257.974 11.526 257.67499999999995 11.066Q257.376 10.606000000000002 256.40999999999997 10.422L255.536 10.238V9.778000000000002L263.908 7.753999999999998L264.414 8.168L264.23 14.608V37.102Q264.23 38.022 264.552 38.596999999999994Q264.874 39.172 265.748 39.402L266.162 39.54V40.0L258.296 40.506L257.882 38.85Q256.64 39.678 255.053 40.184Q253.466 40.69 251.534 40.69ZM254.202 38.988Q256.134 38.988 257.74399999999997 37.838V19.576Q256.042 18.472 254.248 18.472Q252.04 18.472 250.476 21.025Q248.912 23.578 248.912 29.052Q248.912 34.525999999999996 250.38400000000001 36.757Q251.856 38.988 254.202 38.988Z" class="lk-word"/><path d="M87.359 51.95H88.417Q88.4745 51.95 88.51475 51.99025Q88.555 52.0305 88.555 52.088V59.862Q88.555 59.9195 88.51475 59.95975Q88.4745 60.0 88.417 60.0H87.359Q87.3015 60.0 87.26125 59.95975Q87.221 59.9195 87.221 59.862V56.573Q87.221 56.5155 87.1635 56.5155H84.231Q84.1735 56.5155 84.1735 56.573V59.862Q84.1735 59.9195 84.13325 59.95975Q84.093 60.0 84.0355 60.0H82.9775Q82.92 60.0 82.87975 59.95975Q82.8395 59.9195 82.8395 59.862V52.088Q82.8395 52.0305 82.87975 51.99025Q82.92 51.95 82.9775 51.95H84.0355Q84.093 51.95 84.13325 51.99025Q84.1735 52.0305 84.1735 52.088V55.308Q84.1735 55.3655 84.231 55.3655H87.1635Q87.221 55.3655 87.221 55.308V52.088Q87.221 52.0305 87.26125 51.99025Q87.3015 51.95 87.359 51.95ZM93.0695 57.286V54.664Q93.0695 53.836 93.4375 53.19775Q93.8055 52.5595 94.46674999999999 52.20875Q95.128 51.858000000000004 95.9905 51.858000000000004Q96.86449999999999 51.858000000000004 97.52574999999999 52.20875Q98.187 52.5595 98.555 53.19775Q98.923 53.836 98.923 54.664V57.286Q98.923 58.1255 98.555 58.7695Q98.187 59.4135 97.52574999999999 59.764250000000004Q96.86449999999999 60.115 95.9905 60.115Q95.128 60.115 94.461 59.764250000000004Q93.794 59.4135 93.43175 58.7695Q93.0695 58.1255 93.0695 57.286ZM97.589 57.332V54.6525Q97.589 53.905 97.152 53.456500000000005Q96.715 53.008 95.9905 53.008Q95.2775 53.008 94.84049999999999 53.456500000000005Q94.4035 53.905 94.4035 54.6525V57.332Q94.4035 58.068 94.84049999999999 58.5165Q95.2775 58.965 95.9905 58.965Q96.715 58.965 97.152 58.5165Q97.589 58.068 97.589 57.332ZM108.854 51.95H109.912Q109.9695 51.95 110.00975 51.99025Q110.05 52.0305 110.05 52.088V59.862Q110.05 59.9195 110.00975 59.95975Q109.9695 60.0 109.912 60.0H108.854Q108.79650000000001 60.0 108.75625000000001 59.95975Q108.71600000000001 59.9195 108.71600000000001 59.862V54.3765Q108.71600000000001 54.342 108.68725 54.3305Q108.6585 54.319 108.647 54.3535L107.2095 56.5615Q107.152 56.6535 107.0485 56.6535H106.51950000000001Q106.416 56.6535 106.3585 56.5615L104.90950000000001 54.365Q104.898 54.3305 104.86925 54.342Q104.8405 54.3535 104.8405 54.388V59.862Q104.8405 59.9195 104.80025 59.95975Q104.76 60.0 104.7025 60.0H103.64450000000001Q103.587 60.0 103.54675 59.95975Q103.5065 59.9195 103.5065 59.862V52.088Q103.5065 52.0305 103.54675 51.99025Q103.587 51.95 103.64450000000001 51.95H104.7025Q104.806 51.95 104.8635 52.042L106.738 54.8825Q106.761 54.9055 106.78399999999999 54.9055Q106.807 54.9055 106.8185 54.8825L108.693 52.042Q108.7505 51.95 108.854 51.95ZM120.14200000000001 53.1H116.2205Q116.16300000000001 53.1 116.16300000000001 53.1575V55.308Q116.16300000000001 55.3655 116.2205 55.3655H118.85400000000001Q118.9115 55.3655 118.95175 55.40575Q118.992 55.446 118.992 55.5035V56.3775Q118.992 56.435 118.95175 56.47525Q118.9115 56.5155 118.85400000000001 56.5155H116.2205Q116.16300000000001 56.5155 116.16300000000001 56.573V58.7925Q116.16300000000001 58.85 116.2205 58.85H120.14200000000001Q120.1995 58.85 120.23975 58.89025Q120.28 58.9305 120.28 58.988V59.862Q120.28 59.9195 120.23975 59.95975Q120.1995 60.0 120.14200000000001 60.0H114.96700000000001Q114.90950000000001 60.0 114.86925000000001 59.95975Q114.82900000000001 59.9195 114.82900000000001 59.862V52.088Q114.82900000000001 52.0305 114.86925000000001 51.99025Q114.90950000000001 51.95 114.96700000000001 51.95H120.14200000000001Q120.1995 51.95 120.23975 51.99025Q120.28 52.0305 120.28 52.088V52.962Q120.28 53.0195 120.23975 53.05975Q120.1995 53.1 120.14200000000001 53.1ZM136.60000000000002 59.9195Q136.60000000000002 60.0 136.485 60.0H135.3005Q135.197 60.0 135.12800000000001 59.9195L134.6105 59.3445Q134.57600000000002 59.31 134.53 59.3445Q133.472 60.092 132.20700000000002 60.092Q131.149 60.092 130.46475 59.591750000000005Q129.78050000000002 59.0915 129.78050000000002 58.1255Q129.78050000000002 57.3435 130.21175 56.803Q130.643 56.2625 131.37900000000002 55.8025Q131.448 55.7565 131.3905 55.722Q130.781 54.986 130.58550000000002 54.5835Q130.39000000000001 54.181 130.39000000000001 53.744Q130.39000000000001 53.215 130.666 52.78375Q130.942 52.3525 131.44225 52.10525Q131.94250000000002 51.858000000000004 132.5865 51.858000000000004Q133.2535 51.858000000000004 133.77100000000002 52.10525Q134.2885 52.3525 134.58175 52.801Q134.875 53.2495 134.875 53.836Q134.875 54.5375 134.461 55.066500000000005Q134.04700000000003 55.5955 133.34550000000002 56.0325Q133.288 56.067 133.334 56.113Q133.863 56.734 134.622 57.5735Q134.65650000000002 57.6195 134.70250000000001 57.5735Q134.97850000000003 57.2745 135.4155 56.6535Q135.48450000000003 56.527 135.5995 56.6075L136.38150000000002 57.056Q136.51950000000002 57.1365 136.4275 57.24Q135.9445 57.976 135.473 58.505L135.4615 58.528Q135.4615 58.574 135.50750000000002 58.62Q135.9215 59.103 136.3125 59.54Q136.393 59.6435 136.45625 59.712500000000006Q136.51950000000002 59.7815 136.56550000000001 59.8275Q136.60000000000002 59.8735 136.60000000000002 59.9195ZM131.72400000000002 53.8705Q131.72400000000002 54.066 131.86200000000002 54.307500000000005Q132.0 54.549 132.44850000000002 55.0895Q132.483 55.1355 132.52900000000002 55.101Q133.0235 54.7905 133.28225000000003 54.49725Q133.54100000000003 54.204 133.54100000000003 53.859Q133.54100000000003 53.5025 133.288 53.28975Q133.03500000000003 53.077 132.621 53.077Q132.2185 53.077 131.97125 53.295500000000004Q131.72400000000002 53.514 131.72400000000002 53.8705ZM133.72500000000002 58.4475Q133.77100000000002 58.4015 133.72500000000002 58.367Q133.66750000000002 58.3095 133.61 58.2405Q133.5525 58.1715 133.495 58.1025Q133.34550000000002 57.93 133.00050000000002 57.539L132.73600000000002 57.24Q132.55200000000002 57.0445 132.28750000000002 56.734Q132.26450000000003 56.6995 132.20700000000002 56.7225Q131.6895 57.056 131.4135 57.378Q131.13750000000002 57.7 131.13750000000002 58.1025Q131.13750000000002 58.4935 131.43075000000002 58.72925Q131.72400000000002 58.965 132.2185 58.965Q132.9315 58.965 133.72500000000002 58.4475ZM151.39050000000003 59.885 151.01100000000002 58.6545Q150.98800000000003 58.6085 150.95350000000002 58.6085H147.91750000000002Q147.883 58.6085 147.86 58.6545L147.4805 59.885Q147.44600000000003 60.0 147.33100000000002 60.0H146.181Q146.11200000000002 60.0 146.07750000000001 59.95975Q146.043 59.9195 146.06600000000003 59.839L148.56150000000002 52.065Q148.59600000000003 51.95 148.711 51.95H150.1485Q150.26350000000002 51.95 150.29800000000003 52.065L152.805 59.839Q152.81650000000002 59.862 152.81650000000002 59.8965Q152.81650000000002 60.0 152.69000000000003 60.0H151.54000000000002Q151.425 60.0 151.39050000000003 59.885ZM148.26250000000002 57.562H150.597Q150.66600000000003 57.562 150.64300000000003 57.493L149.45850000000002 53.6405Q149.44700000000003 53.5945 149.42400000000004 53.5945Q149.401 53.5945 149.38950000000003 53.6405L148.21650000000002 57.493Q148.205 57.562 148.26250000000002 57.562ZM162.7705 54.342Q162.7705 55.0435 162.46 55.584Q162.14950000000002 56.1245 161.58025000000004 56.41775Q161.01100000000002 56.711 160.26350000000002 56.711H158.42350000000002Q158.366 56.711 158.366 56.7685V59.862Q158.366 59.9195 158.32575000000003 59.95975Q158.2855 60.0 158.228 60.0H157.17000000000002Q157.1125 60.0 157.07225 59.95975Q157.032 59.9195 157.032 59.862V52.0765Q157.032 52.019 157.07225 51.97875Q157.1125 51.9385 157.17000000000002 51.9385H160.3325Q161.05700000000002 51.9385 161.609 52.2375Q162.161 52.536500000000004 162.46575 53.082750000000004Q162.7705 53.629 162.7705 54.342ZM161.43650000000002 54.3765Q161.43650000000002 53.8015 161.08 53.44499999999999Q160.7235 53.088499999999996 160.137 53.088499999999996H158.42350000000002Q158.366 53.088499999999996 158.366 53.146V55.5725Q158.366 55.63 158.42350000000002 55.63H160.137Q160.7235 55.63 161.08 55.285Q161.43650000000002 54.94 161.43650000000002 54.3765ZM172.713 54.342Q172.713 55.0435 172.4025 55.584Q172.092 56.1245 171.52275000000003 56.41775Q170.95350000000002 56.711 170.20600000000002 56.711H168.366Q168.3085 56.711 168.3085 56.7685V59.862Q168.3085 59.9195 168.26825000000002 59.95975Q168.228 60.0 168.1705 60.0H167.1125Q167.055 60.0 167.01475 59.95975Q166.9745 59.9195 166.9745 59.862V52.0765Q166.9745 52.019 167.01475 51.97875Q167.055 51.9385 167.1125 51.9385H170.275Q170.9995 51.9385 171.5515 52.2375Q172.1035 52.536500000000004 172.40825 53.082750000000004Q172.713 53.629 172.713 54.342ZM171.37900000000002 54.3765Q171.37900000000002 53.8015 171.0225 53.44499999999999Q170.666 53.088499999999996 170.0795 53.088499999999996H168.366Q168.3085 53.088499999999996 168.3085 53.146V55.5725Q168.3085 55.63 168.366 55.63H170.0795Q170.666 55.63 171.0225 55.285Q171.37900000000002 54.94 171.37900000000002 54.3765ZM181.82750000000001 59.885 181.448 58.6545Q181.425 58.6085 181.3905 58.6085H178.3545Q178.32 58.6085 178.297 58.6545L177.9175 59.885Q177.883 60.0 177.768 60.0H176.618Q176.549 60.0 176.5145 59.95975Q176.48 59.9195 176.50300000000001 59.839L178.9985 52.065Q179.03300000000002 51.95 179.148 51.95H180.5855Q180.7005 51.95 180.735 52.065L183.242 59.839Q183.2535 59.862 183.2535 59.8965Q183.2535 60.0 183.127 60.0H181.977Q181.862 60.0 181.82750000000001 59.885ZM178.6995 57.562H181.034Q181.103 57.562 181.08 57.493L179.8955 53.6405Q179.88400000000001 53.5945 179.861 53.5945Q179.838 53.5945 179.8265 53.6405L178.6535 57.493Q178.642 57.562 178.6995 57.562ZM191.8965 59.8965 190.3785 56.5845Q190.3555 56.5385 190.30949999999999 56.5385H188.9295Q188.87199999999999 56.5385 188.87199999999999 56.596000000000004V59.862Q188.87199999999999 59.9195 188.83175 59.95975Q188.79149999999998 60.0 188.734 60.0H187.676Q187.61849999999998 60.0 187.57824999999997 59.95975Q187.53799999999998 59.9195 187.53799999999998 59.862V52.088Q187.53799999999998 52.0305 187.57824999999997 51.99025Q187.61849999999998 51.95 187.676 51.95H190.83849999999998Q191.54 51.95 192.0805 52.24325Q192.621 52.536500000000004 192.92000000000002 53.071250000000006Q193.219 53.606 193.219 54.296Q193.219 55.0895 192.81074999999998 55.64725Q192.4025 56.205 191.678 56.4235Q191.655 56.4235 191.64350000000002 56.4465Q191.632 56.4695 191.6435 56.4925L193.265 59.839Q193.28799999999998 59.885 193.28799999999998 59.908Q193.28799999999998 60.0 193.1615 60.0H192.0575Q191.9425 60.0 191.8965 59.8965ZM188.87199999999999 53.1575V55.446Q188.87199999999999 55.5035 188.9295 55.5035H190.65449999999998Q191.2065 55.5035 191.54575 55.17575Q191.885 54.848 191.885 54.3075Q191.885 53.767 191.54575 53.4335Q191.2065 53.1 190.65449999999998 53.1H188.9295Q188.87199999999999 53.1 188.87199999999999 53.1575ZM203.0005 53.1H199.07899999999998Q199.02149999999997 53.1 199.02149999999997 53.1575V55.308Q199.02149999999997 55.3655 199.07899999999998 55.3655H201.71249999999998Q201.76999999999998 55.3655 201.81025 55.40575Q201.85049999999998 55.446 201.85049999999998 55.5035V56.3775Q201.85049999999998 56.435 201.81025 56.47525Q201.76999999999998 56.5155 201.71249999999998 56.5155H199.07899999999998Q199.02149999999997 56.5155 199.02149999999997 56.573V58.7925Q199.02149999999997 58.85 199.07899999999998 58.85H203.0005Q203.058 58.85 203.09825 58.89025Q203.1385 58.9305 203.1385 58.988V59.862Q203.1385 59.9195 203.09825 59.95975Q203.058 60.0 203.0005 60.0H197.82549999999998Q197.76799999999997 60.0 197.72774999999996 59.95975Q197.68749999999997 59.9195 197.68749999999997 59.862V52.088Q197.68749999999997 52.0305 197.72774999999996 51.99025Q197.76799999999997 51.95 197.82549999999998 51.95H203.0005Q203.058 51.95 203.09825 51.99025Q203.1385 52.0305 203.1385 52.088V52.962Q203.1385 53.0195 203.09825 53.05975Q203.058 53.1 203.0005 53.1ZM207.59549999999996 59.862V52.088Q207.59549999999996 52.0305 207.63574999999997 51.99025Q207.67599999999996 51.95 207.73349999999996 51.95H208.79149999999998Q208.84899999999996 51.95 208.88924999999995 51.99025Q208.92949999999996 52.0305 208.92949999999996 52.088V58.7925Q208.92949999999996 58.85 208.98699999999997 58.85H212.83949999999996Q212.89699999999996 58.85 212.93724999999995 58.89025Q212.97749999999996 58.9305 212.97749999999996 58.988V59.862Q212.97749999999996 59.9195 212.93724999999995 59.95975Q212.89699999999996 60.0 212.83949999999996 60.0H207.73349999999996Q207.67599999999996 60.0 207.63574999999997 59.95975Q207.59549999999996 59.9195 207.59549999999996 59.862Z" class="lk-tag"/></svg><span class="rule" aria-hidden="true"></span><h1>Returns <span>Desk</span> board</h1></div>
+  <div class="badges" id="badges"></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" id="tab-board" aria-selected="true">Board</button>
+  <button class="tab" role="tab" id="tab-eval" aria-selected="false">Evaluation</button>
+</nav>
+
+<div id="view-board">
+<main>
+  <section class="railwrap">
+    <div class="eyebrow"><span>Queue</span><span class="count num" id="queue-count"></span></div>
+    <div class="rail" id="rail"></div>
+    <p class="hint">In production, Requests arrive by form. Here they come from the Sample Set. Click one to pull it out of turn.</p>
+  </section>
+
+  <section class="bench">
+    <div class="eyebrow"><span>Open Request</span><span id="bench-state"></span></div>
+    <div class="card" id="bench"></div>
+  </section>
+
+  <section class="policy">
+    <div class="eyebrow"><span>Policy</span><span class="mono">policy.json</span></div>
+    <pre id="policy" tabindex="0" aria-label="policy.json"></pre>
+    <div class="note">Every rule the retailer has. Edit the file, then use the demo reset to load it.</div>
+  </section>
+</main>
+
+<div class="foot">
+  <section>
+    <div class="eyebrow"><span>Resolution Log</span><span class="count num" id="log-count"></span></div>
+    <div class="log" id="log"></div>
+  </section>
+  <section>
+    <div class="eyebrow"><span>What this cost</span></div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+</div>
+</div>
+
+<div id="view-eval" class="eval" hidden>
+  <div id="eval"></div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = (v) => v == null ? "n/a" : "$" + v.toFixed(v < 0.01 ? 6 : 4);
+const usd = (v) => v == null ? "n/a" : "$" + Number(v).toFixed(2);
+const PARTIES = ["retailer", "carrier", "customer", "unclear"];
+const MONEY = ["refund", "partial", "replace"];
+const EXITS = ["deny", "escalate"];
+let S = null;           // last server state
+let last = null;        // the response to the last pull, shown on the bench until the next pull
+let busy = false;
+
+// When the app is hosted behind Container Apps sign-in, an expired or missing session makes
+// the platform answer API calls with a redirect to Microsoft login. fetch cannot follow that
+// cross-origin, so send the whole tab to the login endpoint and come back to this page.
+function signIn() {
+  location.assign("/.auth/login/aad?post_login_redirect_uri=" + encodeURIComponent(location.pathname));
+  return new Promise(() => {});   // never resolves; the page is navigating away
+}
+
+async function api(path, body, method) {
+  let r;
+  try {
+    r = await fetch(path, {method: method || (body ? "POST" : "GET"), headers: {"content-type": "application/json", "X-Requested-With": "returns-desk"},
+                           body: body ? JSON.stringify(body) : undefined, redirect: "manual"});
+  } catch (e) {
+    throw new Error("Could not reach the returns desk service (" + e.message + ")");
+  }
+  if (r.type === "opaqueredirect" || r.status === 401) return signIn();
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) { const err = new Error(data.detail || r.statusText); err.rule = data.rule; err.status = r.status; throw err; }
+  return data;
+}
+
+async function refresh() { S = await api("/api/state"); render(); }
+
+function render() { renderBadges(); renderRail(); renderBench(); renderPolicy(); renderLog(); renderTiles(); }
+
+function renderBadges() {
+  const e = S.engines;
+  $("badges").innerHTML = `
+    <span class="badge"><span class="dot"></span>Microsoft Foundry</span>
+    <span class="badge">Generative engine <b>${esc(e.reading.name)}</b></span>
+    <span class="badge">Probabilistic engine <b>${esc(e.scoring.name)}</b></span>
+    <span class="badge">Auth <b>${esc(e.reading.auth)}${e.scoring.auth !== e.reading.auth ? " / " + esc(e.scoring.auth) + " (probabilistic)" : ""}</b></span>
+    <span class="badge">Today <b>${esc(S.today)}</b></span>
+    <button class="btn small" id="reset" title="Demo only: empties the Resolution Log and the open request">Reset <span class="demo-only">demo only</span></button>`;
+  $("reset").onclick = async () => { await api("/api/reset", {}); last = null; await refresh(); };
+}
+
+function renderRail() {
+  $("queue-count").textContent = S.queue_length ? `${S.queue_length} waiting` : "";
+  $("rail").innerHTML = S.queue.length
+    ? S.queue.map((r, i) => `<button type="button" class="slip ${i === 0 && !S.current ? "next" : ""}"
+          data-id="${esc(r.request_id)}" ${S.current ? "disabled" : ""} title="Pull ${esc(r.request_id)}">
+        <span class="head"><span>${esc(r.request_id)}</span><span>${r.paid == null ? "" : usd(r.paid)}</span></span>
+        <span class="sub">${esc(r.item)}${r.reason_code ? " &middot; " + esc(r.reason_code) : ""}</span></button>`).join("")
+    : '<div class="empty">No Requests waiting.</div>';
+  for (const el of $("rail").querySelectorAll("button.slip")) el.onclick = () => pull(el.dataset.id);
+}
+
+function requestFacts(r) {
+  const rows = [["Order", `${esc(r.order_id)} &middot; ${esc(r.sku)}`], ["Item", `${esc(r.item)} (${esc(r.category || "unknown")})`],
+    ["Paid", r.paid == null ? "n/a" : usd(r.paid)], ["Delivery Date", esc(r.delivered || "none held")], ["Submitted", esc(r.submitted)],
+    ["Reason Code", esc(r.reason_code || "none")],
+    ["Statement", r.statement ? `<span class="statement">${esc(r.statement)}</span>` : "none"]];
+  return `<div class="facts"><dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+    ${r.photo_url ? `<img class="photo" src="${esc(r.photo_url)}" alt="Photo sent with ${esc(r.request_id)}">` : ""}</div>`;
+}
+
+function readingCard(rd) {
+  if (!rd) return `<div class="engine"><div class="eyebrow"><span>Generative engine</span><span>reads the Statement</span></div>
+    <div class="pick none">not asked</div><div class="hint">Nothing to read.</div></div>`;
+  return `<div class="engine"><div class="eyebrow"><span>Generative engine</span><span>responsible party</span></div>
+    <div class="pick">${esc(rd.responsible_party)}</div>
+    <div class="why">${esc(rd.reason)}</div>
+    <div class="flags">${rd.flags.length ? rd.flags.map((f) => `<span class="chip flag">${esc(f.replace(/_/g, " "))}</span>`).join("") : '<span class="chip">no Flags</span>'}</div>
+    <details><summary>Reply draft</summary><p>${esc(rd.reply_draft)}</p></details></div>`;
+}
+
+function scoringCard(sc) {
+  if (!sc) return `<div class="engine"><div class="eyebrow"><span>Probabilistic engine</span><span>probability per party</span></div>
+    <div class="pick none">not asked</div><div class="hint">Nothing to score.</div></div>`;
+  const ranked = Object.entries(sc.probabilities).sort((x, y) => y[1] - x[1]);
+  return `<div class="engine"><div class="eyebrow"><span>Probabilistic engine</span><span>probability per party</span></div>
+    <div class="pick">${esc(sc.top)}</div>
+    <div class="bars">${ranked.map(([k, v]) => `<div class="bar ${k === sc.top ? "top" : ""}">
+      <div class="label"><span>${esc(k)}</span><div class="track"><div class="fill" style="width:${Math.round(v * 100)}%"></div></div></div>
+      <div class="pct num">${Math.round(v * 100)}%</div></div>`).join("")}</div>
+    <div class="hint">confidence ${sc.confidence.toFixed(2)}</div></div>`;
+}
+
+function chip(agreement, asked) {
+  if (!asked) return `<div class="agreechip none">not asked</div>`;
+  return `<div class="agreechip ${agreement ? "yes" : "no"}">${agreement ? "Agreement" : "No agreement"}</div>`;
+}
+
+function enginesRow(reading, scores, agreement) {
+  return `<div class="engines">${readingCard(reading)}${chip(agreement, !!reading)}${scoringCard(scores)}</div>`;
+}
+
+function resolutionBlock(r) {
+  const money_ = r.disposition === "refund" || r.disposition === "partial";
+  return `<div class="result"><div class="big">${esc(r.request.request_id)}: ${esc(r.disposition)}
+      <span class="resolver ${esc(r.resolver)}">${esc(r.resolver)}</span></div>
+    <div>Responsible Party <b>${esc(r.responsible_party)}</b>${money_ ? ` &middot; amount <b class="num">${usd(r.amount)}</b> &middot; fee <span class="num">${usd(r.fee)}</span>` : ""}
+      &middot; return postage ${esc(r.return_postage)}</div>
+    <div class="hint" style="margin-top:0">${esc(r.note)}</div></div>`;
+}
+
+function renderBench() {
+  const b = $("bench");
+  if (S.current) { renderPending(S.current); return; }
+  $("bench-state").textContent = last ? "resolved" : "";
+  let top = "";
+  if (last && last.resolution) {
+    const r = last.resolution;
+    top = `<h2>${esc(r.request.request_id)} resolved</h2><div class="sub">${esc(r.request.item)}</div>
+      ${requestFacts(r.request)}${r.reading ? enginesRow(r.reading, r.scores, r.reading.responsible_party === topOf(r.scores)) : ""}${resolutionBlock(r)}<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">`;
+  }
+  b.innerHTML = `${top}<div class="idle">
+      <h2>${S.queue_length ? "Next Request is up" : "Queue empty"}</h2>
+      <p>${S.queue_length
+          ? "Pull it and Policy checks it first. Only a Statement reaches the engines, and only what is left reaches the Clerk."
+          : "Every Request is resolved. Use the demo reset to run the queue again."}</p>
+      <button class="btn primary big" id="pull" ${S.queue_length ? "" : "disabled"}>Pull next Request</button>
+      <div class="err" id="err"></div></div>`;
+  $("pull").onclick = () => pull();
+}
+
+function topOf(sc) {
+  if (!sc) return null;
+  return Object.entries(sc.probabilities).sort((x, y) => y[1] - x[1])[0][0];
+}
+
+function renderPending(p) {
+  const r = p.request;
+  $("bench-state").textContent = "waiting for the Clerk";
+  const startParty = p.reading ? p.reading.responsible_party : "unclear";
+  $("bench").innerHTML = `<h2>${esc(r.request_id)} <span class="sub">${esc(r.item)}</span></h2>
+    <div class="sub">${p.returns_this_quarter} earlier ${p.returns_this_quarter === 1 ? "Request" : "Requests"} this quarter from this Customer</div>
+    ${p.clerk_rule === "no_delivery_date" ? '<div class="hint">No Delivery Date held, so Policy sent this Request to the Clerk.</div>' : ""}
+    ${requestFacts(r)}${enginesRow(p.reading, p.scores, p.agreement)}
+    <form class="clerk" id="clerk">
+      <div class="row"><label for="party">Responsible Party</label>
+        <select id="party">${PARTIES.map((x) => `<option value="${x}" ${x === startParty ? "selected" : ""}>${x}</option>`).join("")}</select>
+        <span class="hint" id="rowinfo" style="margin:0"></span></div>
+      <div class="dispositions" id="dispositions" role="radiogroup" aria-label="Disposition"></div>
+      <div class="row" id="partialrow" hidden><label for="partial">Partial amount (USD)</label>
+        <input type="number" id="partial" min="0.01" step="0.01" inputmode="decimal"></div>
+      <div><label for="note">Note</label><textarea id="note" placeholder="Required for deny and escalate"></textarea></div>
+      <div class="row"><button class="btn primary" type="submit" id="resolve">Resolve</button></div>
+      <div class="err" id="err"></div>
+    </form>`;
+  const draw = () => {
+    const party = $("party").value, allowed = p.allowed_by_party[party] || [];
+    const keep = (document.querySelector("input[name=disp]:checked") || {}).value;
+    const options = [...MONEY.filter((d) => allowed.includes(d)), ...EXITS];
+    const pick = options.includes(keep) ? keep : options[0];
+    $("dispositions").innerHTML = options.map((d) => `<label><input type="radio" name="disp" value="${d}" ${d === pick ? "checked" : ""}><span>${d}</span></label>`).join("");
+    const row = p.responsibility[party];
+    $("rowinfo").textContent = row.dispositions.length
+      ? `fee ${Math.round(row.fee * 100)}% · return postage ${row.return_postage}` : "Policy allows no money Disposition for this party.";
+    $("dispositions").querySelectorAll("input").forEach((i) => i.onchange = sync);
+    sync();
+  };
+  const sync = () => { const d = (document.querySelector("input[name=disp]:checked") || {}).value; $("partialrow").hidden = d !== "partial"; };
+  $("party").onchange = draw; draw();
+  $("clerk").onsubmit = async (ev) => {
+    ev.preventDefault(); if (busy) return; busy = true; $("err").textContent = "";
+    const disposition = document.querySelector("input[name=disp]:checked").value;
+    const amt = $("partial").value;
+    try {
+      const res = await api("/api/resolve", {request_id: r.request_id, responsible_party: $("party").value, disposition,
+        note: $("note").value, partial_amount: disposition === "partial" && amt !== "" ? Number(amt) : null});
+      last = {resolution: res}; await refresh();
+    } catch (e) { $("err").textContent = (e.rule ? `Validator, rule ${e.rule}: ` : "") + e.message; }
+    finally { busy = false; }
+  };
+}
+
+function renderPolicy() { $("policy").textContent = S.policy ? JSON.stringify(S.policy, null, 2) : "policy.json could not be read."; }
+
+function renderLog() {
+  $("log-count").textContent = S.log.length ? `${S.log.length}` : "";
+  $("log").innerHTML = S.log.length ? [...S.log].reverse().map((e) => `<div class="entry">
+      <span class="id">${esc(e.request_id)}</span>
+      <span class="resolver ${esc(e.resolver)}">${esc(e.resolver)}</span>
+      <span class="st ${esc(e.disposition)}">${esc(e.disposition)}</span>
+      <span class="detail">${esc(e.responsible_party)}${["refund", "partial"].includes(e.disposition) ? " &middot; " + usd(e.amount) : ""} &middot; ${esc(e.note)}</span></div>`).join("")
+    : '<div class="empty">Nothing resolved yet.</div>';
+}
+
+function renderTiles() {
+  const r = S.engines.reading, s = S.engines.scoring, c = S.counts;
+  const total = (r.cost_usd || 0) + (s.cost_usd || 0);
+  const tile = (t, e, note) => `<div class="tile"><div class="eyebrow">${t}</div>
+    <div class="big num">${e.calls} <span style="font-size:14px;color:var(--muted)">calls</span></div>
+    <div class="small num">${e.input_tokens} in / ${e.output_tokens} out tokens &middot; ${money(e.cost_usd)}</div>
+    <div class="small">${note}</div></div>`;
+  $("tiles").innerHTML =
+    tile("Generative engine", r, "Bills input and output tokens. Writes the reason a Clerk reads.") +
+    tile("Probabilistic engine", s, "Bills input only. A probability per party, no prose.") +
+    `<div class="tile"><div class="eyebrow">Resolved by</div>
+      <div class="big num">${c.policy} <span style="font-size:14px;color:var(--muted)">policy</span> &middot; ${c.engines} <span style="font-size:14px;color:var(--muted)">engines</span> &middot; ${c.clerk} <span style="font-size:14px;color:var(--muted)">clerk</span></div>
+      <div class="small">Policy costs nothing to apply.</div></div>` +
+    `<div class="tile total"><div class="eyebrow">Run so far</div><div class="big num">${money(total)}</div>
+     <div class="small">No engine is called while idle.</div></div>`;
+}
+
+// Pull the head of the queue, or the Request the clerk clicked in the queue.
+async function pull(requestId) {
+  if (busy) return; busy = true;
+  const btn = $("pull"); if (btn) { btn.disabled = true; btn.textContent = "Checking Policy…"; }
+  const body = typeof requestId === "string" ? {request_id: requestId} : {};
+  try { last = await api("/api/next", body); await refresh(); }
+  catch (e) { const el = $("err"); if (el) el.textContent = e.message; if (btn) { btn.disabled = false; btn.textContent = "Pull next Request"; } }
+  finally { busy = false; }
+}
+
+// ---- evaluation tab: reads the saved result, never runs one ------------------------
+function gridHTML(rep) {
+  const g = rep.grid || {};
+  const cell = (known, named) => {
+    const n = (g[known] || {})[named] || 0;
+    return `<td class="num ${n === 0 ? "zero" : known === named ? "diag" : "off"}">${n}</td>`;
+  };
+  return `<div class="grid-card"><h3>${esc(rep.engine)}</h3><div class="eyebrow">known party (rows) against named party (columns)</div>
+    <div class="tablewrap"><table><thead><tr><th>Known</th>${PARTIES.map((p) => `<th>${p}</th>`).join("")}</tr></thead>
+    <tbody>${PARTIES.map((k) => `<tr><td>${k}</td>${PARTIES.map((n) => cell(k, n)).join("")}</tr>`).join("")}</tbody></table></div></div>`;
+}
+
+async function renderEval() {
+  const el = $("eval");
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  let ev;
+  try { ev = await api("/api/evaluation"); }
+  catch (e) {
+    el.innerHTML = e.status === 404
+      ? '<div class="empty">No saved Evaluation yet. Run <span class="mono">returns-desk evaluate</span>; the board only shows the saved result and never runs one.</div>'
+      : `<div class="err">${esc(e.message)}</div>`;
+    return;
+  }
+  const reps = ev.reports || [];
+  const acc = (r) => r.accuracy ?? (r.requests ? r.correct / r.requests : 0);
+  const cpr = (r) => r.cost_per_request_usd ?? (r.requests ? r.cost_usd / r.requests : 0);
+  el.innerHTML = `<div class="meta">Run <b>${esc(ev.run_at)}</b> on <b>${esc(ev.model)}</b> &middot;
+      <b class="num">${esc(ev.labeled_requests)}</b> Labeled Requests (${esc(ev.from_sample_set)} from the Sample Set, ${esc(ev.from_resolution_log)} from the Resolution Log) &middot;
+      engines agreed on <b class="num">${ev.agreement_rate == null ? "n/a" : Math.round(ev.agreement_rate * 100) + "%"}</b></div>
+    <div class="tablewrap"><table><thead><tr><th>Engine</th><th>Requests</th><th>Named the known party</th><th>Accuracy</th><th>Cost per Request</th><th>Tokens in / out</th><th>Total cost</th></tr></thead>
+    <tbody>${reps.map((r) => `<tr><td>${esc(r.engine)}</td><td class="num">${r.requests}</td><td class="num">${r.correct}</td>
+      <td class="num">${(acc(r) * 100).toFixed(1)}%</td><td class="num">${money(cpr(r))}</td>
+      <td class="num">${r.input_tokens ?? 0} / ${r.output_tokens ?? 0}</td><td class="num">${money(r.cost_usd)}</td></tr>`).join("")}</tbody></table></div>
+    <div class="grids">${reps.map(gridHTML).join("")}</div>`;
+}
+
+function showTab(name) {
+  const board = name !== "eval";
+  $("view-board").hidden = !board; $("view-eval").hidden = board;
+  $("tab-board").setAttribute("aria-selected", board); $("tab-eval").setAttribute("aria-selected", !board);
+  if (!board) renderEval();
+}
+$("tab-board").onclick = () => showTab("board");
+$("tab-eval").onclick = () => showTab("eval");
+
+refresh().catch((e) => { $("bench").innerHTML = `<div class="err">${esc(e.message)}</div>`; });
+</script>
+</body>
+</html>

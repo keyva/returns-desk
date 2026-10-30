@@ -1,0 +1,7 @@
+subscription_id      = "00000000-0000-0000-0000-000000000000"
+resource_group_name  = "rg-from-root-layer"
+foundry_account_name = "account-from-root-layer"
+location             = "eastus"
+image_tag            = "v1"
+require_signin       = true
+signin_principal_ids = []  # object ids of users allowed to sign in; empty means only you

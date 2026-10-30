@@ -1,0 +1,35 @@
+{
+  "window_days": 30,
+  "returns_per_quarter": 3,
+  "reason_codes": { "changed_mind": "customer", "wrong_size": "customer", "wrong_item": "retailer" },
+  "categories": {
+    "kitchen_hard": {
+      "returnable": true,
+      "photo_required_above": 40.00,
+      "responsibility": {
+        "retailer":     { "dispositions": ["refund", "replace"], "fee": 0.00, "return_postage": "retailer" },
+        "carrier":  { "dispositions": ["refund", "replace"], "fee": 0.00, "return_postage": "none" },
+        "customer": { "dispositions": ["refund", "partial"], "fee": 0.10, "return_postage": "customer" },
+        "unclear":  { "dispositions": [] }
+      }
+    },
+    "apparel": {
+      "returnable": true,
+      "photo_required_above": 100.00,
+      "responsibility": {
+        "retailer":     { "dispositions": ["refund", "replace"], "fee": 0.00, "return_postage": "retailer" },
+        "carrier":  { "dispositions": ["refund", "replace"], "fee": 0.00, "return_postage": "none" },
+        "customer": { "dispositions": ["refund"],            "fee": 0.00, "return_postage": "customer" },
+        "unclear":  { "dispositions": [] }
+      }
+    },
+    "perishable": { "returnable": false },
+    "final_sale": { "returnable": false }
+  },
+  "auto_approval": {
+    "require_agreement": true,
+    "min_probability": 0.80,
+    "max_amount": 75.00,
+    "block_on_flags": ["possible_abuse", "used"]
+  }
+}

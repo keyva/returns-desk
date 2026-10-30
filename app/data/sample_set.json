@@ -1,0 +1,646 @@
+[
+  {
+    "request_id": "RQ-303",
+    "order_id": "R-2043",
+    "sku": "CHS-030",
+    "submitted": "2026-10-23",
+    "reason_code": null,
+    "statement": "Opened the cheese box last night and the soft one tasted off, sour and almost fizzy. The ice packs were still frozen solid when it got here so I don't think it sat out.",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-304",
+    "order_id": "R-2044",
+    "sku": "JKT-400",
+    "submitted": "2026-10-30",
+    "reason_code": "wrong_size",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-302",
+    "order_id": "R-2042",
+    "sku": "TSH-010",
+    "submitted": "2026-10-24",
+    "reason_code": "changed_mind",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-301",
+    "order_id": "R-2041",
+    "sku": "KET-200",
+    "submitted": "2026-10-14",
+    "reason_code": null,
+    "statement": "Box arrived crushed, the handle was snapped clean off. I have not used it.",
+    "photo": "photos/kettle-crushed.jpg",
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-307",
+    "order_id": "R-2047",
+    "sku": "MIX-500",
+    "submitted": "2026-10-19",
+    "reason_code": null,
+    "statement": "The shipping box was split open along one seam and the mixer's own box is crushed in on the side. There's a chip in the paint right where the dent is. I haven't plugged it in.",
+    "photo": "photos/mixer-crushed.jpg",
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-305",
+    "order_id": "R-2045",
+    "sku": "BLN-300",
+    "submitted": "2026-10-28",
+    "reason_code": null,
+    "statement": "It's started making a grinding noise, worked fine before. I make a smoothie in it most mornings, nothing crazy, no ice. Now it smells hot if I run it longer than about ten seconds.",
+    "photo": "photos/blender-base.jpg",
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-306",
+    "order_id": "R-2046",
+    "sku": "HPH-410",
+    "submitted": "2026-10-27",
+    "reason_code": null,
+    "statement": "My headphones never arrived. Your tracking says delivered on the 20th but nothing was left at my door, I checked with the front desk in my building too. Please refund me.",
+    "photo": "photos/headphones-sealed.jpg",
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": true
+  },
+  {
+    "request_id": "RQ-308",
+    "order_id": "R-2048",
+    "sku": "FPR-090",
+    "submitted": "2026-10-09",
+    "reason_code": null,
+    "statement": "glass carafe was in pieces when I opened the box. box had a big dent on one side and it rattled when the driver handed it to me. didn't even get to make one cup",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-309",
+    "order_id": "R-2049",
+    "sku": "GLS-060",
+    "submitted": "2026-10-12",
+    "reason_code": null,
+    "statement": "Two of the four glasses were shattered inside. To be fair the packing looked fine, plenty of paper, but the outer box was soaking wet and caved in on top like something heavy had been sitting on it.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-310",
+    "order_id": "R-2050",
+    "sku": "KET-200",
+    "submitted": "2026-10-22",
+    "reason_code": null,
+    "statement": "kettle handle came off in the box. corner of the carton is smashed flat, looks like it got dropped off the truck. pic attached",
+    "photo": "photos/kettle-crushed.jpg",
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-311",
+    "order_id": "R-2051",
+    "sku": "SCL-070",
+    "submitted": "2026-10-06",
+    "reason_code": null,
+    "statement": "Screen is cracked right across. The carton had a tire mark on it, I kid you not. I took a picture of the box before I recycled it but the form only takes one file so I didn't bother.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-312",
+    "order_id": "R-2052",
+    "sku": "MXB-050",
+    "submitted": "2026-10-15",
+    "reason_code": null,
+    "statement": "Big bowl is chipped along the rim and the smallest one is cracked in half. Tracking shows it sat at a depot for six days and then showed up split open and taped back shut with tape that is not yours.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-313",
+    "order_id": "R-2053",
+    "sku": "HDY-090",
+    "submitted": "2026-10-06",
+    "reason_code": null,
+    "statement": "The bag was torn open at one end when it came and the sweatshirt inside was damp and smells like gasoline. I'm not putting that on.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-314",
+    "order_id": "R-2054",
+    "sku": "CUT-040",
+    "submitted": "2026-10-20",
+    "reason_code": null,
+    "statement": "Sorry to be a pain over a cutting board. It's split down the middle along the grain and there was a muddy boot print on the mailer, so I think someone stepped on it.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-315",
+    "order_id": "R-2055",
+    "sku": "KNF-080",
+    "submitted": "2026-10-24",
+    "reason_code": null,
+    "statement": "THE TIP OF THE KNIFE WAS STICKING OUT THROUGH THE BOX when I found it on the porch!! Tip is bent and there's a nick in the edge. Honestly dangerous, a kid could have grabbed that.",
+    "photo": null,
+    "label": {
+      "responsible_party": "carrier",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-316",
+    "order_id": "R-2056",
+    "sku": "CAS-220",
+    "submitted": "2026-10-11",
+    "reason_code": null,
+    "statement": "I ordered the blue one. This is orange. Very orange. Photo is next to the packing slip, which also says blue.",
+    "photo": "photos/wrong-color.jpg",
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-317",
+    "order_id": "R-2057",
+    "sku": "LMP-150",
+    "submitted": "2026-10-19",
+    "reason_code": null,
+    "statement": "Lamp came without the shade. The spot in the foam where it goes is just empty, so it was never packed. The box itself was perfect. Can you send the shade or do I have to send the whole thing back?",
+    "photo": "photos/lamp-missing-part.jpg",
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-318",
+    "order_id": "R-2058",
+    "sku": "BOT-350",
+    "submitted": "2026-10-26",
+    "reason_code": null,
+    "statement": "Sole is peeling away at the toe on the left boot. I've worn them maybe eight times, to the office and back, no hiking or anything like that. For what these cost I expected them to last longer than three weeks.",
+    "photo": "photos/boots-sole.jpg",
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-319",
+    "order_id": "R-2059",
+    "sku": "TIM-015",
+    "submitted": "2026-10-25",
+    "reason_code": null,
+    "statement": "timer doesnt beep. put a fresh battery in, still nothing. display counts down fine just no sound so whats the point of it",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-320",
+    "order_id": "R-2060",
+    "sku": "TSH-010",
+    "submitted": "2026-10-18",
+    "reason_code": null,
+    "statement": "The tag says medium but this is not a medium. I laid it on top of three other medium tees I own and it's a good three inches narrower and shorter. I think it's mislabeled, not that I picked wrong.",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-321",
+    "order_id": "R-2061",
+    "sku": "SOC-005",
+    "submitted": "2026-10-21",
+    "reason_code": null,
+    "statement": "Paid for three pairs, two in the package. It was still sealed so nobody took one out along the way.",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-322",
+    "order_id": "R-2062",
+    "sku": "SPT-030",
+    "submitted": "2026-10-08",
+    "reason_code": null,
+    "statement": "First time I used the big spatula the silicone head slid right off the handle into a pan of scrambled eggs. Not a great breakfast. The other two seem okay but I don't trust them now.",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-323",
+    "order_id": "R-2063",
+    "sku": "JNS-120",
+    "submitted": "2026-10-16",
+    "reason_code": null,
+    "statement": "These are listed as straight leg but they are a skinny cut, nothing like the picture on the product page. I didn't change my mind about anything, this just isn't the product that was listed.",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-324",
+    "order_id": "R-2064",
+    "sku": "JKT-400",
+    "submitted": "2026-10-29",
+    "reason_code": null,
+    "statement": "Jacket doesn't sit right across the shoulders. Tags are still on it. I'd like a full refund please.",
+    "photo": "photos/jacket-hem.jpg",
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-325",
+    "order_id": "R-2065",
+    "sku": "TSH-010",
+    "submitted": "2026-10-17",
+    "reason_code": null,
+    "statement": "never opened it, was meant as a gift and turns out he already has one. photo shows it's still in the bag",
+    "photo": "photos/shirt-tags.jpg",
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-326",
+    "order_id": "R-2066",
+    "sku": "PAN-110",
+    "submitted": "2026-10-24",
+    "reason_code": null,
+    "statement": "This pan is junk. The coating is coming off after three weeks and I only ever use wooden utensils on it. I want my money back, not store credit.",
+    "photo": "photos/pan-scratched.jpg",
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-327",
+    "order_id": "R-2067",
+    "sku": "TST-240",
+    "submitted": "2026-10-22",
+    "reason_code": null,
+    "statement": "Bought this and then my roommate moved in with a toaster of her own. Still in the plastic like you can see. Can I send it back?",
+    "photo": "photos/toaster-sealed.jpg",
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-328",
+    "order_id": "R-2068",
+    "sku": "SCF-020",
+    "submitted": "2026-10-15",
+    "reason_code": null,
+    "statement": "Color isn't what it looked like on my screen. Nothing wrong with it, just not for me.",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-329",
+    "order_id": "R-2069",
+    "sku": "RAN-095",
+    "submitted": "2026-10-20",
+    "reason_code": null,
+    "statement": "Ordered this for a trip that got canceled. Wore it around the house once to try it on, that's all. Do I still get the full amount back?",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-330",
+    "order_id": "R-2070",
+    "sku": "GLS-060",
+    "submitted": "2026-10-26",
+    "reason_code": null,
+    "statement": "These are a lot smaller than I pictured. I didn't read the dimensions closely enough, my mistake. All four are fine and back in the box.",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-331",
+    "order_id": "R-2071",
+    "sku": "HDY-090",
+    "submitted": "2026-10-19",
+    "reason_code": null,
+    "statement": "too big. went by the size chart but I guess im between sizes",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-332",
+    "order_id": "R-2072",
+    "sku": "KNF-080",
+    "submitted": "2026-10-10",
+    "reason_code": null,
+    "statement": "I'll be honest, I dropped it on the tile floor the first night and the tip snapped off. I know that's on me. I've ordered from you for years and I'm hoping you'll take it back anyway.",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-333",
+    "order_id": "R-2073",
+    "sku": "CUT-040",
+    "submitted": "2026-10-21",
+    "reason_code": null,
+    "statement": "Ran it through the dishwasher one time and now it's warped and there's a crack along the end. Is that normal?? Nothing on the listing said hand wash only that I saw.",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-334",
+    "order_id": "R-2074",
+    "sku": "MUG-012",
+    "submitted": "2026-10-18",
+    "reason_code": null,
+    "statement": "Found a crack in the mug. Not sure when it happened, I didn't really look at it when I unpacked it. Box was fine.",
+    "photo": "photos/mug-cracked.jpg",
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-335",
+    "order_id": "R-2075",
+    "sku": "SCL-070",
+    "submitted": "2026-10-27",
+    "reason_code": null,
+    "statement": "doesn't work right",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-336",
+    "order_id": "R-2076",
+    "sku": "HDY-090",
+    "submitted": "2026-10-25",
+    "reason_code": null,
+    "statement": "Stitching on one sleeve came undone after the first wash. Cold water like the tag says. Or I think so anyway, my husband does most of the laundry.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-337",
+    "order_id": "R-2077",
+    "sku": "MXB-050",
+    "submitted": "2026-10-25",
+    "reason_code": null,
+    "statement": "I got an empty box. Well, not empty, there was packing paper in it. But no bowls. The tape looked normal to me.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-338",
+    "order_id": "R-2078",
+    "sku": "TIM-015",
+    "submitted": "2026-10-15",
+    "reason_code": null,
+    "statement": "Its not what I ordered I think? Or maybe it is. Looks different from the picture, the buttons are on the side not the front",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-339",
+    "order_id": "R-2079",
+    "sku": "JNS-120",
+    "submitted": "2026-10-22",
+    "reason_code": null,
+    "statement": "Tracking says delivered on the 12th but I was away. My neighbor brought the package over on the 19th and it had been opened. Jeans are there but there's a grease stain on the left leg.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-340",
+    "order_id": "R-2080",
+    "sku": "FPR-090",
+    "submitted": "2026-10-28",
+    "reason_code": null,
+    "statement": "Plunger is really stiff and coffee squirts out the top when I push it down. Followed the instructions. Maybe it's my grind? Either way I can't use it like this.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-341",
+    "order_id": "R-2081",
+    "sku": "SCF-020",
+    "submitted": "2026-10-29",
+    "reason_code": null,
+    "statement": "Please process a return for the scarf, thank you.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-342",
+    "order_id": "R-2082",
+    "sku": "GLS-060",
+    "submitted": "2026-10-13",
+    "reason_code": null,
+    "statement": "One glass has a chip in the rim. Could have been me knocking it on the faucet the first time I washed them, honestly not sure, I only noticed it after.",
+    "photo": null,
+    "label": {
+      "responsible_party": "unclear",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-343",
+    "order_id": "R-2083",
+    "sku": "JNS-120",
+    "submitted": "2026-10-21",
+    "reason_code": "wrong_size",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-344",
+    "order_id": "R-2084",
+    "sku": "CUT-040",
+    "submitted": "2026-10-22",
+    "reason_code": "changed_mind",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-345",
+    "order_id": "R-2085",
+    "sku": "CLR-777",
+    "submitted": "2026-10-16",
+    "reason_code": "changed_mind",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "customer",
+      "source": "author"
+    },
+    "demo": false
+  },
+  {
+    "request_id": "RQ-346",
+    "order_id": "R-2086",
+    "sku": "LMP-150",
+    "submitted": "2026-10-14",
+    "reason_code": "wrong_item",
+    "statement": "",
+    "photo": null,
+    "label": {
+      "responsible_party": "retailer",
+      "source": "author"
+    },
+    "demo": false
+  }
+]
